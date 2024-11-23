@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>foragans!</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            padding: 20px;
+            position: relative;
+            flex-direction: column;
+        }
+
+        .ghost-image {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            animation: ghostAppear 1s ease-out forwards, ghostDisappear 1s ease-in forwards 1.6s;
+        }
+
+        @keyframes ghostAppear {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes ghostDisappear {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .header {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            width: 60px;
+            height: 60px;
+            background-color: #000000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header img {
+            width: 61px;
+            height: 61px;
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+        }
+
+        .header img:hover {
+            transform: scale(1.1);
+        }
+
+        .container {
+            text-align: center;
+            max-width: 90%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .message-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 5px solid #000000;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            width: 100%;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: fadeIn 2s forwards;
+            animation-delay: 2.5s;
+        }
+
+        .message {
+            font-size: 4vw;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        button {
+            background-color: #ffffff;
+            color: #000000;
+            border: 5px solid #ffffff;
+            padding: 6px 17px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, background-color 0.3s ease, border-color 1s ease;
+            width: 80%;
+            max-width: 200px;
+            margin-top: 15px;
+            opacity: 0;
+            transform: scale(1);
+            animation: fadeIn 1s forwards 2.5s;
+        }
+
+        button:active {
+            transform: scale(1.1);
+            background-color: #ffffff00;
+            border-color: #ffffff;
+            transition: border-color 1s ease;
+        }
+
+        button:hover {
+            background-color: #000000;
+            color: #ffffff;
+            border-color: #000000;
+            transform: scale(1.05);
+        }
+
+        /* Bubble Notifikasi */
+        .bubble {
+            position: absolute;
+            top: 10px;
+            right: 70px;
+            background-color: #ff6347;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: bubbleAnimation 5s forwards;
+        }
+
+        @keyframes bubbleAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        /* Footer Style */
+        footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spotify-icon {
+            font-size: 2rem;
+            color: black;  /* Mengubah warna ikon Spotify menjadi hitam */
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .spotify-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .spotify-text {
+            font-size: 1.2rem;
+            color: #000000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Foto yang muncul di awal, tetap ada -->
+    <div class="ghost-image">
+        <img src="iq.jpeg" alt="Foto" />
+    </div>
+
+    <div class="header" onclick="showBubbles()">
+        <img src="meng.jpg" alt="Klik untuk melihat pesan" id="clickImage">
+    </div>
+
+    <div class="container">
+        <div id="message" class="message-box">
+            <div id="message-text" class="message">alloww selamat datang</div>
+        </div>
+        <button id="nextButton" onclick="nextMessage()">picik kak!!</button>
+    </div>
+
+    <audio id="audioPlayer" autoplay loop muted>
+        <source src="gluesong.mp3" type="audio/mp3">
+        <source src="gluesong.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <footer>
+        <a href="https://open.spotify.com/playlist/3FLvb1EQbEgW2gVngJnl7w?si=l0F_XIMuQcy5AEEzcSd7lw&pi=2LhuPeb5SEOl3" target="_blank">
+            <i class="fab fa-spotify spotify-icon"></i>
+        </a>
+        <span class="spotify-text">here kak!</span>
+    </footer>
+
+    <script>
+        const messages = [
+            { text: "alloww selamat datang", buttonText: "picik kak!!" },
+            { text: "nesaa has something for u! mau tau tidak??!!", buttonText: "mau mau mau" },
+            { text: "eiittsss senyum duluu😋", buttonText: "sabarr" },
+            { text: "aku hitung yaa!", buttonText: "pernah ga ready" },
+            { text: "satuu" },
+            { text: "duwaa✌🏻" },
+            { text: "tigaa🖐🏻" },
+            { text: "aduhh gantengnyaa", buttonText: "mau lanjut?" },
+            { text: "kamu liat meng di atas tidak? coba pencet", buttonText: "sudah?" },
+            { text: "ada lagi loh", buttonText: "disini" },
+            { text: "awas bahayaa!! ada mantranya", buttonText: "apatuh apatuh" },
+            { text: "SHIMZALABHIMS DUARR. selamat kamu telah menemukannya", buttonText: "sini sini" },
+            { text: "halo, selamat bertambah umur semoga sehat selalu dan semoga hal baik selalu datang, pokoknya kamu harus bahagia sebesar alam semestaaa, anything for u kaka ganteng😻", buttonText: "next" },
+            { text: "terimakasi yaa, sudah selalu mendengarkan ceritaku yang sangat membosankan ini", buttonText: "y sm sm" },
+            { text: "sehat sehat terus ya?!!", buttonText: "oke?" },
+            { text: "semangat menjalani hal-hal yang menyebalkan itu", buttonText: ">>>" },
+            { text: "segala hal yang sudah di lewatin itu namanya perjalanan, jadi tetap berusaha sampai kilometer selanjutnya yaa", buttonText: "oke tidak?" },
+            { text: "dan kamu tau bumi ini luas sekali, tapi semoga kita bertemu", buttonText: "heheh" },
+            { text: "terakhir, pencet logo spotifynya", buttonText: "baii 😻" }
+        ];
+
+        let currentMessage = 0;
+        let autoMessageStart = false;
+
+        function nextMessage() {
+            const button = document.getElementById('nextButton');
+            button.classList.add('transparent');
+
+            setTimeout(() => {
+                button.classList.remove('transparent');
+            }, 500);
+
+            currentMessage++;
+            if (currentMessage >= messages.length) {
+                currentMessage = 0;
+            }
+
+            const messageElement = document.getElementById('message-text');
+            const messageBox = document.getElementById('message');
+
+            messageBox.style.animation = 'none';
+            messageBox.offsetHeight;
+            messageBox.style.animation = 'fadeIn 1.5s forwards';
+
+            messageElement.textContent = messages[currentMessage].text;
+            const nextButton = document.getElementById('nextButton');
+            nextButton.textContent = messages[currentMessage].buttonText;
+
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.muted = false;
+
+            if (["satuu", "duwaa", "tigaaa🖐🏻"].includes(messageElement.textContent.trim())) {
+                nextButton.style.display = 'none';
+            } else if (messageElement.textContent === "aduhh gantengnyaa") {
+                nextButton.style.display = 'inline-block';
+            }
+
+            if (currentMessage === 4 && !autoMessageStart) {
+                autoMessageStart = true;
+                setTimeout(() => {
+                    nextMessage();
+                    setTimeout(() => nextMessage(), 2000);
+                    setTimeout(() => nextMessage(), 4000);
+                }, 2000);
+            }
+        }
+
+        function showBubbles() {
+            const bubble1 = document.createElement('div');
+            bubble1.classList.add('bubble');
+            bubble1.textContent = "hai adam";
+            document.body.appendChild(bubble1);
+
+            setTimeout(() => {
+                const bubble2 = document.createElement('div');
+                bubble2.classList.add('bubble');
+                bubble2.textContent = "happy birthday!!";
+                document.body.appendChild(bubble2);
+            }, 3000);
+        }
+
+        // Fungsi untuk menghentikan audio saat halaman tidak terlihat
+        document.addEventListener('visibilitychange', function() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            if (document.hidden) {
+                audioPlayer.pause();
+            } else {
+                audioPlayer.play();
+            }
+        });
+
+        window.onload = () => {
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.muted = false;
+        };
+    </script>
+</body>
+</html>
